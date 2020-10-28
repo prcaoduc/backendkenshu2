@@ -1,0 +1,63 @@
+version: "3"
+
+#NETWORK
+networks:
+    backendkenshu2:
+        driver: bridge
+
+#VOLUMES
+volumes: 
+    dir-site:
+        driver_opts:
+            device: /Users/cao.sonduc/backend_kenshu/sites/
+            o: bind
+            type: bind
+
+services: 
+    #container PHP
+    php:
+        container_name: php
+        build:
+            dockerfile: Dockerfile
+            context: ./php/
+        tty: true
+        restart: always
+        networks: 
+            - backendkenshu2
+        volumes: 
+            - dir-site:/home/sites/
+    #container Apache HTTPD
+    httpd:
+        container_name: httpd
+        image: "httpd:latest"
+        restart: always
+        networks: 
+            - backendkenshu2
+        volumes: 
+            - dir-site:/home/sites/
+            - ./httpd.conf:/usr/local/apache2/conf/httpd.conf
+        ports: 
+            - "9999:80" # localhost:9999
+    #container MySQL
+    mysql:
+        container_name: mysql
+        image: "mysql:latest"
+        restart: always
+        networks: 
+            - backendkenshu2
+        volumes:
+            - ./mysql/db:/var/lib/mysql
+            - ./mysql/my.cnf:/etc/mysql/my.cnf
+        env_file:
+            - ./mysql/mysql.env
+    #container phpmyadmin
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: pma
+        env_file:
+            - ./pma.env
+        restart: always
+        ports:
+            - 8080:80
+        networks: 
+            - backendkenshu2
