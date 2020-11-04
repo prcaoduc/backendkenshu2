@@ -1,4 +1,3 @@
-
 <?php
 class BaseController
 {
@@ -20,6 +19,8 @@ class BaseController
     } else {
       // 操作したいファイルが存在しない場合、pagesのerrorアクションに移動する
       header('Location: index.php?controller=pages&action=error');
+      // echo($view_file);
+      // exit();
     }
   }
 }

@@ -11,7 +11,7 @@ class PagesController extends BaseController
   public function home()
   {
     $data = array(
-      'name' => 'Cao Son Duc',
+      'name' => 'Caaaao Son Duc',
       'yomikata' => 'カオ・ソン・ドゥック',
       'kanjiname' => '高・山・徳',
       'age' => 23
