@@ -20,7 +20,7 @@ CREATE TABLE users(
     nickname VARCHAR(20) NOT NULL UNIQUE,
 	email VARCHAR(255) NOT NULL UNIQUE,
 	pass VARCHAR(255) NOT NULL,
-    isactive SMALLINT,
+    -- isactive SMALLINT,
     INDEX (nickname)
 );
 
@@ -31,6 +31,7 @@ CREATE TABLE articles(
 	content         TEXT NOT NULL,
 	author_id       INT UNSIGNED NOT NULL,
     created_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at     DATETIME NOT NULL DEFAULT NULL,
     -- published_at    DATETIME DEFAULT NULL,
     FOREIGN KEY (author_id) REFERENCES users(id),
     -- FULLTEXT (title, content),
@@ -78,10 +79,10 @@ INSERT INTO tags(name)
 -- users seeder
 INSERT INTO users(nickname, email, pass)
 	VALUES
-	( "Frodo",  "email1@test.com", "hashedpassword" ),
-    ( "Sam",    "email2@test.com", "hashedpassword" ),
-    ( "Pippin", "email3@test.com", "hashedpassword" ),
-    ( "Merry",  "email4@test.com", "hashedpassword" );
+	( "Frodo",  "email1@test.com", MD5('hashedpassword') ),
+    ( "Sam",    "email2@test.com", MD5('hashedpassword') ),
+    ( "Pippin", "email3@test.com", MD5('hashedpassword') ),
+    ( "Merry",  "email4@test.com", MD5('hashedpassword') );
 
 -- articles seeder
 

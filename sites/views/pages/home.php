@@ -1,7 +1,8 @@
-
 <?php
-  echo "私は:$name
-  読み方は：$yomikata
-  漢字で書くと：$kanjiname
-  今年".$age."歳です";
-?>
+echo '<ul>';
+foreach ($articles as $article) {
+  echo '<li> '. $article->id .'
+    <a href="index.php?controller=articles&action=show&id=' . $article->id . '">' . $article->title . '</a>
+  </li>';
+}
+echo '</ul>';

@@ -4,6 +4,9 @@ class Article
 {
   public $title;
   public $content;
+  public $id;
+  public $created_at;
+  public $author_id;
 
   function __construct($id, $title, $content, $created_at, $author_id)
   {
