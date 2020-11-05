@@ -31,7 +31,7 @@ CREATE TABLE articles(
 	content         TEXT NOT NULL,
 	author_id       INT UNSIGNED NOT NULL,
     created_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    modified_at     DATETIME NOT NULL DEFAULT NULL,
+    modified_at     DATETIME DEFAULT NULL,
     -- published_at    DATETIME DEFAULT NULL,
     FOREIGN KEY (author_id) REFERENCES users(id),
     -- FULLTEXT (title, content),

@@ -1,8 +1,9 @@
 <?php
 require_once('controllers/base_controller.php');
-require_once('models/user.php');
 require_once('helpers/session.php');
-
+require_once('helpers/validator.php');
+require_once('models/user.php');
+require_once('models/authentication.php');
 class UsersController extends BaseController
 {
   function __construct()
@@ -26,17 +27,24 @@ class UsersController extends BaseController
 
   public function register()
   {
-    $session = new Session();
-    $_POST = $session->get('signup');
-    $this->render('register');
+    if (!Authentication::check()) {
+      $session = new Session();
+      $_POST = $session->get('signup');
+      $this->render('register');
+    } else header('Location: ?controller=pages&action=home');
   }
 
-  public function login(){
-    $session = new Session();
-    $this->render('login');
+  public function login()
+  {
+    if (!Authentication::check()) {
+      echo Authentication::check();
+      $session = new Session();
+      $this->render('login');
+    } else header('Location: ?controller=pages&action=home');
   }
 
-  public function test(){
+  public function test()
+  {
     $this->render('test');
   }
 
@@ -55,16 +63,22 @@ class UsersController extends BaseController
         $member = User::login($email, $pwd);
         if ($member) {
           $session->set('id', $member->id);
+          $session->set('email', $member->email);
+          $session->set('loggedin', true);
           $session->set('time', time());
           if ($_POST['save'] == 'on') {
             setcookie('email', $email, time() + 60 * 60 * 24 * 14);
             setcookie('pwd', $pwd, time() + 60 * 60 * 24 * 14);
           }
-          echo $_SESSION['id'];
           $data = array('user' => $member);
           $this->render('show', $data);
+          exit;
         } else $errors_array['login'] = 'false';
       } else $errors_array['login'] = 'blank';
+    }
+    if (!empty($errors_array)) {
+      $error = array('errors_array' => $errors_array);
+      $this->render('login', $error);
     }
   }
 
@@ -85,7 +99,8 @@ class UsersController extends BaseController
     // password and it's repeat match validation
     strcmp($input['pwd'], $input['pwd-repeat']) != 0 ? $errors_array['pwd-repeat'] = 'notsame' : null;
     // concate all errors to 1 array
-    $errors_array = array_merge($errors_array, UsersController::blankValidator($input));
+    // blankValidation is using for blank verify
+    $errors_array = array_merge($errors_array, Validator::blankValidator($input));
     // duplicate unique rows validation
     User::exist('email', $input['email']) ? $errors_array['email'] = 'duplicate' : null;
     User::exist('nickname', $input['nickname']) ? $errors_array['nickname'] = 'duplicate' : null;
@@ -120,16 +135,16 @@ class UsersController extends BaseController
     }
   }
 
-  private static function blankValidator($input)
-  {
-    $error = [];
-    $empty_fields = array_filter($input, array('UsersController', 'emptyFilter'));
-    foreach ($empty_fields as $key => $value) $error[$key] = 'blank';
-    return $error;
-  }
+  // private static function blankValidator($input)
+  // {
+  //   $error = [];
+  //   $empty_fields = array_filter($input, array('UsersController', 'emptyFilter'));
+  //   foreach ($empty_fields as $key => $value) $error[$key] = 'blank';
+  //   return $error;
+  // }
 
-  private static function emptyFilter($val)
-  {
-    return empty($val);
-  }
+  // private static function emptyFilter($val)
+  // {
+  //   return empty($val);
+  // }
 }

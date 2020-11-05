@@ -3,7 +3,7 @@
 //
 $controllers = array(
   'pages' => ['home', 'error'], // staticpages routes
-  'articles' => ['index', 'show'], // articles routes
+  'articles' => ['index', 'show', 'add', 'create'], // articles routes
   'users' => ['index', 'show', 'login', 'signin', 'register', 'signup', 'check', 'test'] // users routes
 ); 
 

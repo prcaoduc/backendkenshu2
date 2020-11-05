@@ -6,26 +6,28 @@ class User
     public $email;
     public $password;
 
-    function __construct($id = null, $nickname = null, $email = null)
-    {
-        $this->id = $id;
-        $this->nickname = $nickname;
-        $this->email = $email;
-    }
+    // function __construct($id = null, $nickname = null, $email = null)
+    // {
+    //     $this->id = $id;
+    //     $this->nickname = $nickname;
+    //     $this->email = $email;
+    // }
 
     // create user
-    static function create($nickname, $email, $password)
+    static function create($nickname, $email, $pwd)
     {
         $data = [
             'nickname'  => $nickname,
             'email'     => $email,
-            'pass'       => sha1($password)
+            'pass'       => password_hash($pwd, PASSWORD_DEFAULT)
         ];
         $db = DB::getInstance();
         $sql = "INSERT INTO users (nickname, email, pass) VALUES (:nickname, :email, :pass)";
         $req = $db->prepare($sql)->execute($data);
         return $req > 0 ? $db->lastInsertId() : null;
     }
+
+    // public function save(){}
 
     // get all users
     static function all()
@@ -34,7 +36,7 @@ class User
         $req = $db->query('SELECT * FROM users');
         $list = [];
 
-        foreach ($req->fetchAll() as $item) $list[] = new User($item['id'], $item['nickname'], $item['email']);
+        foreach ($req->fetchAll(\PDO::FETCH_CLASS, 'User') as $item) $list[] = $item;
 
         return $list;
     }
@@ -46,19 +48,22 @@ class User
         $req = $db->prepare('SELECT * FROM users WHERE id = :id');
         $req->execute(array('id' => $id));
 
+        $req->setFetchMode(PDO::FETCH_CLASS, 'User');
         $item = $req->fetch();
-        if (isset($item['id'])) {
-            return new User($item['id'], $item['nickname'], $item['email']);
+        if (isset($item)) {
+            var_dump($item);
+            return $item;
         }
         return null;
     }
 
     static function login($email, $pwd){
         $db = DB::getInstance();
-        $req = $db->prepare('SELECT * FROM users WHERE email = ? AND pass = ?');
-        $req->execute(array($email, sha1($pwd)));
+        $req = $db->prepare('SELECT * FROM users WHERE email = ?');
+        $req->execute(array($email));
+        $req->setFetchMode(PDO::FETCH_CLASS, 'User');
         $record = $req->fetch();
-        return isset($record['id']) ? new User($record['id'], $record['nickname'], $record['email']) : null;
+        return password_verify($pwd, $record->pass) ? $record : null;
     }
 
     // where function (not working yet)
@@ -71,7 +76,8 @@ class User
             'operator'  => $operator,
             'values'    => $values
         ));
-        $record = $req->fetchAll();
+        
+        $record = $req->fetchAll(\PDO::FETCH_CLASS, 'User');
         return $record;
     }
 
@@ -87,7 +93,8 @@ class User
             return false;
         }
         $req = $db->prepare("SELECT COUNT(*) AS cnt FROM users WHERE $row_name = ?");
-        $req->execute(array($keyword));
+        $req->setFetchMode(PDO::FETCH_CLASS, 'User');
+        $req->execute();
         $record = $req->fetch();
 
         return ($record['cnt'] > 0) ? true : false;

@@ -1,6 +1,7 @@
 <?php
 require_once('connection.php');
 // ルートのパラメータを設定する
+// index.phpファイルはルーティングすることを責任する。
 if (isset($_GET['controller']) || isset($_POST['controller'])) {
   $controller = $_GET['controller'].$_POST['controller'];
   if (isset($_GET['action']) || isset($_POST['action'])) {
