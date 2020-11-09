@@ -5,7 +5,7 @@
     <p>必要事項をご記入頂きまして、「確認」ボタンをクリックください。</p>
     <hr>
 
-    <input type="hidden" name="controller" value="users">
+    <input type="hidden" name="controller" value="authentications">
     <input type="hidden" name="action" value="check">
 
     <label for="email"><b>メールアドレス（ログインするとき使用）：</b></label>

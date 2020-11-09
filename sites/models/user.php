@@ -4,7 +4,6 @@ class User
     public $id;
     public $nickname;
     public $email;
-    public $password;
 
     // function __construct($id = null, $nickname = null, $email = null)
     // {
@@ -23,8 +22,13 @@ class User
         ];
         $db = DB::getInstance();
         $sql = "INSERT INTO users (nickname, email, pass) VALUES (:nickname, :email, :pass)";
-        $req = $db->prepare($sql)->execute($data);
-        return $req > 0 ? $db->lastInsertId() : null;
+        $req = $db->prepare($sql);
+        $req->execute($data);
+        $user_id = $db->lastInsertId();
+        return !empty($user_id) ? $user_id : null;
+        // $req->setFetchMode(PDO::FETCH_CLASS, 'User');
+        // $item = $req->fetch();
+        // return isset($item) ? $item : null;
     }
 
     // public function save(){}
@@ -51,7 +55,6 @@ class User
         $req->setFetchMode(PDO::FETCH_CLASS, 'User');
         $item = $req->fetch();
         if (isset($item)) {
-            var_dump($item);
             return $item;
         }
         return null;
@@ -93,10 +96,18 @@ class User
             return false;
         }
         $req = $db->prepare("SELECT COUNT(*) AS cnt FROM users WHERE $row_name = ?");
-        $req->setFetchMode(PDO::FETCH_CLASS, 'User');
-        $req->execute();
+        $req->execute([$keyword]);
         $record = $req->fetch();
 
         return ($record['cnt'] > 0) ? true : false;
+    }
+
+    static function getCurrent($email){
+        $db = DB::getInstance();
+        $req = $db->prepare('SELECT * FROM users WHERE email = :email');
+        $req->execute(array('email' => $email));
+        $req->setFetchMode(PDO::FETCH_CLASS, 'User');
+        $user = $req->fetch();
+        return !empty($user) ? $user : null;
     }
 }

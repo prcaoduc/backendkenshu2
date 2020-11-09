@@ -2,7 +2,7 @@
 require_once('controllers/base_controller.php');
 require_once('models/article.php');
 require_once('helpers/session.php');
-require_once('models/authentication.php');
+require_once('helpers/authentication.php');
 // スターティックページクラス
 class PagesController extends BaseController
 {

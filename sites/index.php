@@ -6,7 +6,6 @@ if (isset($_GET['controller']) || isset($_POST['controller'])) {
   $controller = $_GET['controller'].$_POST['controller'];
   if (isset($_GET['action']) || isset($_POST['action'])) {
     $action = $_GET['action'].$_POST['action'];
-    // exit;
   } else {
     $action = 'index';
   }

@@ -2,11 +2,6 @@
 class Tag{
     public $name;
 
-    public function __construct($name)
-    {
-        $this->name = $name;
-    }
-
     static function create($name){
         $db = DB::getInstance();
         $req = $db->prepare('SELECT ALL FROM tags WHERE name = ?');

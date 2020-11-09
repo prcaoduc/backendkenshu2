@@ -1,6 +1,6 @@
 <form action="index.php" method="post">
 
-    <input type="hidden" name="controller" value="users">
+    <input type="hidden" name="controller" value="authentications">
     <input type="hidden" name="action" value="signin">
 
     <dl>

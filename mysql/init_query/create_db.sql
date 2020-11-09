@@ -118,11 +118,13 @@ delimiter //
 CREATE PROCEDURE insertimagesproc()
 BEGIN
     DECLARE i int DEFAULT 1;
+    DECLARE image_id int DEFAULT 1;
     WHILE i <= 28 DO
-		IF (i%7) = 1 THEN
-			INSERT INTO images(article_id, url, isthumbnail) VALUES ( (i%7)+1, 'https://picsum.photos/400', 1 );
+        SET image_id = FLOOR(RAND()*(100-1)+1);
+		IF (i%4) = 1 THEN
+			INSERT INTO images(article_id, url, isthumbnail) VALUES ( (i%7)+1, CONCAT('https://picsum.photos/seed/',image_id,'/1100/500'), 1 );
 		ELSE
-			INSERT INTO images(article_id, url, isthumbnail) VALUES ( (i%7)+1, 'https://picsum.photos/400', 0 );
+			INSERT INTO images(article_id, url, isthumbnail) VALUES ( (i%7)+1, CONCAT('https://picsum.photos/seed/',image_id,'/1100/500'), 0 );
         END IF;
         SET i = i + 1;
     END WHILE;

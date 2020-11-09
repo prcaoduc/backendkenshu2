@@ -2,19 +2,17 @@
 // システム内のコントロールは自分のアクションを呼び出せる
 //
 $controllers = array(
-  'pages' => ['home', 'error'], // staticpages routes
-  'articles' => ['index', 'show', 'add', 'create'], // articles routes
-  'users' => ['index', 'show', 'login', 'signin', 'register', 'signup', 'check', 'test'] // users routes
+  'pages'                 => ['home', 'error'], // staticpages routes
+  'articles'              => ['index', 'show', 'add', 'create'], // articles routes
+  'users'                 => ['index', 'show'], // users routes
+  'authentications'       => ['login', 'signin', 'register', 'check', 'signup', 'thanks', 'logout']
 ); 
 
 // URLから取得したパラメーターはまだ設定しないばい（まだ作らない）
 // controller = 'pages', action = 'error'.
 if (!array_key_exists($controller, $controllers) || !in_array($action, $controllers[$controller])) {
-  echo $controller;
-  echo $action;
   $controller = 'pages';
   $action = 'error';
-  
 }
 
 // 定義された controller class を使用するため、ファイルを埋め込む
