@@ -14,7 +14,7 @@ class Article
   {
     $list = [];
     $db = DB::getInstance();
-    $req = $db->query('SELECT * FROM articles');
+    $req = $db->query('SELECT * FROM articles WHERE published = 1');
 
     foreach ($req->fetchAll(\PDO::FETCH_CLASS, 'Article') as $item) {
       $list[] = $item;
@@ -82,6 +82,18 @@ class Article
     return $result;
   }
 
+  static function getbyAuthor($user_id){
+    $db     = DB::getInstance();
+    $list   = [];
+    $query  = 'SELECT * FROM articles WHERE author_id = ?';
+    $req    = $db->prepare($query);
+    $req->execute([$user_id]);
+    foreach ($req->fetchAll(\PDO::FETCH_CLASS, 'Article') as $record) {
+      $list[] = $record;
+    }
+    return (!empty($list)) ? $list : null;
+  }
+
   public function images()
   {
     $db = DB::getInstance();
@@ -118,6 +130,33 @@ class Article
     }
     return (!empty($list)) ? $list : null;
   }
+
+  //not done yet
+  public function save(){
+    $data = get_object_vars($this);
+    var_dump($data);
+  }
+
+  public function update($input){
+    $db = DB::getInstance();
+    $input['id'] = $this->id;
+    $query = 'UPDATE articles SET title = :title, content = :content WHERE id = :id';
+    $req = $db->prepare($query);
+    $req->execute($input);
+    return ($req > 0) ? $this : false;
+  }
+
+  public function revoke(){
+    $db = DB::getInstance();
+    $query = 'UPDATE articles SET published = 0 WHERE id = ?';
+    $req = $db->prepare($query);
+    $req->execute(array($this->id));
+    return ($req > 0) ? true : false;
+  }
+
+  // public function revoke(){
+    
+  // }
 
   //   public function author()
   //   {

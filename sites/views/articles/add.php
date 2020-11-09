@@ -70,7 +70,7 @@
                                             var fr = new FileReader();
                                             fr.onload = (function(i) {
                                                 return function(e) {
-                                                    $('#image_show').append('<li> <input type="checkbox" name="thumbnail" value="' + i + '" id="image_checkbox' + i + '" /> ' +
+                                                    $('#image_show').append('<li> <input type="radio" name="thumbnail" value="' + i + '" id="image_checkbox' + i + '" /> ' +
                                                         '<label for="image_checkbox' + i + '"><img src="' + e.target.result + ' " width="200px" height="100px"/></label>');
                                                 };
                                             })(i);

@@ -1,5 +1,6 @@
 <?php
 class Model{
+    public $id;
     //not yet done
     function belongsToMany($model, $pivot_table, $target_pk, $start_id){
         require_once('models/'.lcfirst($model).'.php');
@@ -14,4 +15,12 @@ class Model{
         $str = '1-2-3-4-5';
         echo substr($str, strrpos($str, '/') + 1);
     }
+
+    // not yet done
+    // function hasMany($model){
+    //     require_once('models/'.lcfirst($model).'.php');
+    //     $db = DB::getInstance();
+    //     $target_table = lcfirst($model).'s';
+    //     $query = 'SELECT * FROM $target_table WHERE '
+    // }
 }

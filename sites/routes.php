@@ -3,14 +3,15 @@
 //
 $controllers = array(
   'pages'                 => ['home', 'error'], // staticpages routes
-  'articles'              => ['index', 'show', 'add', 'create'], // articles routes
-  'users'                 => ['index', 'show'], // users routes
+  'articles'              => ['index', 'show', 'add', 'create', 'edit', 'update', 'delete'], // articles routes
+  'users'                 => ['index', 'show', 'articles'], // users routes
   'authentications'       => ['login', 'signin', 'register', 'check', 'signup', 'thanks', 'logout']
 ); 
 
 // URLから取得したパラメーターはまだ設定しないばい（まだ作らない）
 // controller = 'pages', action = 'error'.
 if (!array_key_exists($controller, $controllers) || !in_array($action, $controllers[$controller])) {
+  echo($controller);
   $controller = 'pages';
   $action = 'error';
 }

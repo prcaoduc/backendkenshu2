@@ -6,7 +6,7 @@ ul {
     display: inline-block;
   }
   
-  input[type="checkbox"][id^="image_checkbox"] {
+  input[type="radio"] {
     display: none;
   }
   

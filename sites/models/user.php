@@ -1,4 +1,5 @@
 <?php
+require_once('models/article.php');
 class User
 {
     public $id;
@@ -60,7 +61,8 @@ class User
         return null;
     }
 
-    static function login($email, $pwd){
+    static function login($email, $pwd)
+    {
         $db = DB::getInstance();
         $req = $db->prepare('SELECT * FROM users WHERE email = ?');
         $req->execute(array($email));
@@ -79,7 +81,7 @@ class User
             'operator'  => $operator,
             'values'    => $values
         ));
-        
+
         $record = $req->fetchAll(\PDO::FETCH_CLASS, 'User');
         return $record;
     }
@@ -93,7 +95,7 @@ class User
                 break;
             case 'nickname':
                 break;
-            return false;
+                return false;
         }
         $req = $db->prepare("SELECT COUNT(*) AS cnt FROM users WHERE $row_name = ?");
         $req->execute([$keyword]);
@@ -102,12 +104,26 @@ class User
         return ($record['cnt'] > 0) ? true : false;
     }
 
-    static function getCurrent($email){
-        $db = DB::getInstance();
+    static function getCurrent($email)
+    {
+        $db  = DB::getInstance();
         $req = $db->prepare('SELECT * FROM users WHERE email = :email');
         $req->execute(array('email' => $email));
         $req->setFetchMode(PDO::FETCH_CLASS, 'User');
         $user = $req->fetch();
         return !empty($user) ? $user : null;
+    }
+
+    public function articles()
+    {
+        $db     = DB::getInstance();
+        $list   = [];
+        $query  = 'SELECT * FROM articles WHERE author_id = ? AND published = 1';
+        $req    = $db->prepare($query);
+        $req->execute([$this->id]);
+        foreach ($req->fetchAll(\PDO::FETCH_CLASS, 'Article') as $record) {
+            $list[] = $record;
+        }
+        return $list;
     }
 }

@@ -7,16 +7,15 @@ class Authentication
     public static function check()
     {
         $session = new Session();
-        
-        $login_session_duration = 2*60;
+        $login_session_duration = 10*60;
         if (!empty($session->get('loggedin_time')) || !empty($session->get('email'))) {
             
             $current_time = time();
             if ((($current_time - $session->get('loggedin_time')) > $login_session_duration)) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public static function logout()

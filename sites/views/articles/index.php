@@ -1,7 +1,7 @@
 <?php
 echo '<ul>';
 foreach ($articles as $article) {
-  echo '<li> '. $article->id .'
+  echo '<li> ' . $article->id . '
     <a href="index.php?controller=articles&action=show&id=' . $article->id . '">' . $article->title . '</a>
   </li>';
 }
@@ -32,7 +32,7 @@ echo '</ul>';
     <div class="col-sm-9">
       <?php
       foreach ($articles as $article) {
-      echo '<h4><small>RECENT POSTS</small></h4>
+        echo '<h4><small>RECENT POSTS</small></h4>
       <hr>
       <h2>I Love Food</h2>
       <h5><span class="glyphicon glyphicon-time"></span> Post by Jane Dane, Sep 27, 2015.</h5>
@@ -41,7 +41,6 @@ echo '</ul>';
       <br><br>';
       }
       ?>
-      </div>
     </div>
   </div>
 </div>

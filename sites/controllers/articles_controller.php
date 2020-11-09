@@ -96,4 +96,31 @@ class ArticlesController extends BaseController
       $this->render('add', $error);
     }
   }
+
+  public function edit(){
+    $article = Article::find($_GET['id']);
+    $data = ['article' => $article];
+    $this->render('edit', $data);
+  }
+
+  public function update(){
+    $article = Article::find($_POST['id']);
+    $input = [
+      'title'     => $_POST['title'],
+      'content'   => $_POST['content'],
+    ];
+    // var_dump($_POST['title']);
+    $article->update($input);
+    if(!empty($article)){
+      header('Location: ?controller=articles&action=show&id=' . $article->id);
+    }
+    else header('Location: ?controller=articles&action=edit&id=' . $article->id);
+  }
+
+  public function delete(){
+    $article = Article::find($_POST['id']);
+    // var_dump($_POST['id']);
+    $article->revoke();
+    header('Location: ?controller=users&action=articles');
+  }
 }
