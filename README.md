@@ -12,8 +12,8 @@ A complete routes for example : localhost:9999/index.php?controller=articles&act
 #### Show (GET) : ?controller=articles&action=show&id=(ID)
 #### Add (GET) : ?controller=articles&action=add
 #### Create (POST) : ?controller=articles&action=create
-#### Edit (GET) : ?controller=articles&action=update
-#### Update (POST) : ?controller=articles&action=delete
+#### Edit (GET) : ?controller=articles&action=update&id=(ID)
+#### Update (POST) : ?controller=articles&action=delete&id=(ID)
 #### Delete (POST) : ?controller=articles&action=edit&id=(ID)
 ### Users Routes : 
 #### Index (GET) : ?controller=users&action=index
