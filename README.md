@@ -1,8 +1,8 @@
 # backendkenshu2
 ## CONFIG
-http port : 9999
-My project routing from index.php, so the URL gonna be like this index.php?(ROUTES) or index?controller=(CONTROLLER_NAME)&action=(ACTION_NAME)&id=(ITEM_ID)
-A complete routes for example : localhost:9999/index.php?controller=articles&action=show&id=1
+ - http port : 9999
+ - My project routing from index.php, so the URL gonna be like this index.php?(ROUTES) or index?controller=(CONTROLLER_NAME)&action=(ACTION_NAME)&id=(ITEM_ID)
+ - A complete routes for example : localhost:9999/index.php?controller=articles&action=show&id=1
 ## ROUTES:
 ### Pages Routes : 
 #### Home (GET) : ?controller=pages&action=home
