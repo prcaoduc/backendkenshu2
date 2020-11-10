@@ -1,7 +1,7 @@
 <?php
 class Validator
 {
-
+    // ブランク確認
     public static function blankValidator($input)
     {
         $error = [];
@@ -10,11 +10,13 @@ class Validator
         return $error;
     }
 
+    // blankValidatorを使用するためのフィルター機能
     public static function emptyFilter($val)
     {
         return empty($val);
     }
 
+    // イメージの拡張、サイズの確認
     public static function imageValidator($input_files)
     {
         if (!isset($input_files))           return 'incorrect';

@@ -1,4 +1,6 @@
 <?php
+// DBテーブルをマッピングするための抽象的なクラス
+// まだ完全しません
 class Model{
     public $id;
     //not yet done

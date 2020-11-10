@@ -1,7 +1,6 @@
+<!-- ユーザーの記事の閲覧 -->
 <div class="container">
-
     <div class="row">
-
         <div class="col-lg-12">
             <div class="container-fluid">
                 <div class="row content">
@@ -47,14 +46,16 @@
                                             <form action="index.php" method="get">
                                                 <input type="hidden" name="controller" value="articles">
                                                 <input type="hidden" name="action" value="edit">
-                                                <input type="hidden" name="article_id" value="' . $articles[$i]->id . '">
+                                                <input type="hidden" name="csrftoken" value="' . $token . '" />
+                                                <input type="hidden" name="id" value="' . $articles[$i]->id . '">
                                                 <input type="submit" value="Edit" class="btn btn-outline-primary"/>
                                             </form>
 
                                             <form action="index.php" method="post">
                                                 <input type="hidden" name="controller" value="articles">
                                                 <input type="hidden" name="action" value="delete">
-                                                <input type="hidden" name="article_id" value="' . $articles[$i]->id . '">
+                                                <input type="hidden" name="csrftoken" value="' . $token . '" />
+                                                <input type="hidden" name="id" value="' . $articles[$i]->id . '">
                                                 <input type="submit" value="Delete" class="btn btn-outline-danger"/>
                                             </form>
                                         </tr>';
@@ -66,7 +67,5 @@
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>

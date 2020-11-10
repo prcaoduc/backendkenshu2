@@ -1,3 +1,4 @@
+<!-- ユーザーリスト閲覧 -->
 <?php
 echo '<ul>';
 foreach ($users as $user) {

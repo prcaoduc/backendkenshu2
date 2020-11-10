@@ -1,6 +1,8 @@
+<!-- 登録情報の確認ページ -->
 <form action="index.php" method="post">
     <input type="hidden" name="controller" value="authentications">
     <input type="hidden" name="action" value="signup">
+    <input type="hidden" name="csrftoken" value="<?php echo htmlentities($token); ?>" />
     <dl>
         <dt>メールアドレス</dt>
         <dd>

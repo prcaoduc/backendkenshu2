@@ -1,6 +1,7 @@
 <?php
-// 記事クラス
 require_once('models/image.php');
+require_once('models/user.php');
+//  articlesテーブルレコードをマッピングするためのモデルクラス
 class Article
 {
   public $id;
@@ -37,6 +38,7 @@ class Article
     return null;
   }
 
+  // 新しい記事をDBに保存する
   static function create($title, $content, $tag, $author_id)
   {
     $input = [
@@ -58,18 +60,21 @@ class Article
     if ($req1 > 0) $data['article_id'] = $db->lastInsertId();
 
     // check already had tags if not insert
+    // タグが存在の確認
     $sql2 = "SELECT * FROM tags WHERE name = ?";
     $req2 = $db->prepare($sql2);
     $req2->execute(array($input['tag']));
     $tag = $req2->fetch(\PDO::FETCH_OBJ);
     if (isset($tag->name)) $data['tag_id'] = $tag->id;
     else {
+      // 存在しなければ、保存する
       $sql2 = "INSERT INTO tags (name) VALUES (?)";
       $req = $db->prepare($sql2)->execute(array($input['tag']));
       if ($req > 0) $data['tag_id'] = $db->lastInsertId();
     }
 
     // insert into pivot table tag's id and article's id from above
+    // ピボットテーブルに記事とタグのリレーションの情報を保存する
     $article_id = $data['article_id'];
     $tag_id = $data['tag_id'];
 
@@ -82,6 +87,7 @@ class Article
     return $result;
   }
 
+  // 作者のIDに基づいて記事を取得する
   static function getbyAuthor($user_id){
     $db     = DB::getInstance();
     $list   = [];
@@ -94,6 +100,7 @@ class Article
     return (!empty($list)) ? $list : null;
   }
 
+  // この記事インタンスのイメージを取得する
   public function images()
   {
     $db = DB::getInstance();
@@ -107,6 +114,7 @@ class Article
     return (!empty($list)) ? $list : null;
   }
 
+  // この記事インタンスのサムネイルを取得する
   public function getThumbnail()
   {
     $list = $this->images();
@@ -117,6 +125,7 @@ class Article
     } else return null;
   }
 
+  // この記事インタンスのタグを取得する
   public function tags()
   {
     $db = DB::getInstance();
@@ -132,11 +141,14 @@ class Article
   }
 
   //not done yet
+  // Laravelのようなsave()をquery string を実施するため
+  // まだ完全しません。model.phpの機能です。
   public function save(){
     $data = get_object_vars($this);
     var_dump($data);
   }
 
+  // 記事を編集した情報をDBに保存する
   public function update($input){
     $db = DB::getInstance();
     $input['id'] = $this->id;
@@ -146,6 +158,7 @@ class Article
     return ($req > 0) ? $this : false;
   }
 
+  // 記事のソフト削除
   public function revoke(){
     $db = DB::getInstance();
     $query = 'UPDATE articles SET published = 0 WHERE id = ?';
@@ -154,17 +167,14 @@ class Article
     return ($req > 0) ? true : false;
   }
 
-  // public function revoke(){
-    
-  // }
-
-  //   public function author()
-  //   {
-  // //     select m.name
-  // // from movies m
-  // // inner join actors_movies am on m.id = am.movie_id
-  // // inner join actors a on am.actor_id = a.id
-  // // where a.name = 'Christopher Walken'
-  //     $query = 'SELECT * FROM users INNER JOIN article_tags '
-  //   }
+  // この記事インタンスの作者を取得する
+  public function author(){
+    $db = DB::getInstance();
+    $query = 'SELECT nickname FROM users INNER JOIN articles ON users.id = articles.author_id WHERE author_id =  ?';
+    $req = $db->prepare($query);
+    $req->execute(array($this->author_id));
+    $req->setFetchMode(PDO::FETCH_CLASS, 'User');
+    $item = $req->fetch();
+    return (!empty($req)) ? $item : null;
+  }
 }

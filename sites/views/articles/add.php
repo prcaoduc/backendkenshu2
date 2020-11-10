@@ -1,3 +1,4 @@
+<!-- 記事投稿ページ -->
 <div class="content">
     <div class="container">
         <div class="load_more">
@@ -7,13 +8,9 @@
 
                     <h1>新たな記事を作成する</h1>
 
-                    <form method="post" action="index.php" role="form" enctype="multipart/form-data">
+                    <form method="post" action="?controller=articles&action=create" role="form" enctype="multipart/form-data">
 
-                        <input type="hidden" name="controller" value="articles">
-                        <input type="hidden" name="action" value="create">
-
-                        <div class="messages"></div>
-
+                        <input type="hidden" name="csrftoken" value="<?php echo htmlentities($token); ?>" />
                         <div class="controls">
 
                             <div class="row">
@@ -64,20 +61,6 @@
                                 <ul id="image_show">
 
                                 </ul>
-                                <script>
-                                    $('input[type="file"]').on('change', function() {
-                                        for (var i = 0; i < this.files.length; i++) {
-                                            var fr = new FileReader();
-                                            fr.onload = (function(i) {
-                                                return function(e) {
-                                                    $('#image_show').append('<li> <input type="radio" name="thumbnail" value="' + i + '" id="image_checkbox' + i + '" /> ' +
-                                                        '<label for="image_checkbox' + i + '"><img src="' + e.target.result + ' " width="200px" height="100px"/></label>');
-                                                };
-                                            })(i);
-                                            fr.readAsDataURL(this.files[i]);
-                                        }
-                                    });
-                                </script>
                                 <div class="col-md-12">
                                     <input type="submit" name="add_submit" class="btn btn-success btn-send" value="Add">
                                 </div>
@@ -99,3 +82,18 @@
         </div>
     </div>
 </div>
+<script>
+    $('input[type="file"]').on('change', function() {
+        for (var i = 0; i < this.files.length; i++) {
+            var fr = new FileReader();
+            fr.onload = (function(i) {
+                return function(e) {
+                    $('#image_show').append('<li> <input type="radio" name="thumbnail" value="' + i + '" id="image_checkbox' + i + '" /> ' +
+                        '<label for="image_checkbox' + i + '"><img src="' + e.target.result + ' " width="200px" height="100px"/></label>');
+                };
+            })(i);
+            fr.readAsDataURL(this.files[i]);
+        }
+    });
+    
+</script>

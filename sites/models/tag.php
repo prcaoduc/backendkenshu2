@@ -1,7 +1,9 @@
 <?php
+//  tagsテーブルレコードをマッピングするためのモデルクラス
 class Tag{
     public $name;
 
+    // DBに新しいタグを保存する
     static function create($name){
         $db = DB::getInstance();
         $req = $db->prepare('SELECT ALL FROM tags WHERE name = ?');

@@ -1,3 +1,4 @@
+<!-- 記事編集ページ -->
 <div class="content">
     <div class="container">
         <div class="load_more">
@@ -7,11 +8,10 @@
 
                     <h1>記事を編集する</h1>
 
-                    <form method="post" action="index.php" role="form" enctype="multipart/form-data">
+                    <form method="post" action="?controller=articles&action=update" role="form" enctype="multipart/form-data">
 
-                        <input type="hidden" name="controller" value="articles">
-                        <input type="hidden" name="action" value="update">
                         <input type="hidden" name="id" value="<?= $article->id ?>">
+                        <input type="hidden" name="csrftoken" value="<?php echo htmlentities($token); ?>" />
 
                         <div class="messages"></div>
 
@@ -39,7 +39,7 @@
                                         <?php if ($error['content'] == 'blank') : ?>
                                             <span class="error">内容を入力ください</span>
                                         <?php endif; ?>
-                                        <textarea id="content" name="content" class="form-control" placeholder="内容 *" required="required" rows="30" data-error="Kindly write your post's content" ><?= $article->title ?></textarea>
+                                        <textarea id="content" name="content" class="form-control" placeholder="内容 *" required="required" rows="30" data-error="Kindly write your post's content" ><?= $article->content ?></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -47,7 +47,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="image_show">
 
+                        </div>
                     </form>
                     </body>
 

@@ -1,9 +1,11 @@
 <?php
+//  imagesテーブルレコードをマッピングするためのモデルクラス
 class Image{
     public $url;
     public $isthumbnail;
 
-    public static function create($article_id, $url, $isthumbnail){
+    // 新しいイメージ情報をDBに保存する
+    public static function create($article_id = null, $url, $isthumbnail){
         $data = [
             'article_id'        => $article_id,
             'url'               => $url,

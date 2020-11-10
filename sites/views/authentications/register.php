@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- 登録ページ -->
 <form action="index.php" method="post" enctype="multipart/form-data">
   <div class="container">
     <h1>新規登録</h1>
@@ -7,6 +7,7 @@
 
     <input type="hidden" name="controller" value="authentications">
     <input type="hidden" name="action" value="check">
+    <input type="hidden" name="csrftoken" value="<?php echo htmlentities($token); ?>" />
 
     <label for="email"><b>メールアドレス（ログインするとき使用）：</b></label>
     <input type="email" placeholder="メールアドレス入力" 　size="35" maxlength="255" value="<?php echo htmlspecialchars($_POST['email'], ENT_QUOTES); ?>" name="email" id="email" required><br>

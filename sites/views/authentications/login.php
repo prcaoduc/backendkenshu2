@@ -1,8 +1,6 @@
-<form action="index.php" method="post">
-
-    <input type="hidden" name="controller" value="authentications">
-    <input type="hidden" name="action" value="signin">
-
+<!-- ローグインページ -->
+<form action="?controller=authentications&action=signin" method="post">
+<input type="hidden" name="csrftoken" value="<?php echo htmlentities($token); ?>" />
     <dl>
         <dt>メールアドレス</dt>
         <dd>

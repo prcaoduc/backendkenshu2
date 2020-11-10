@@ -1,19 +1,13 @@
 <?php
 require_once('models/article.php');
+// usersテーブルレコードをマッピングするためのモデルクラス
 class User
 {
     public $id;
     public $nickname;
     public $email;
 
-    // function __construct($id = null, $nickname = null, $email = null)
-    // {
-    //     $this->id = $id;
-    //     $this->nickname = $nickname;
-    //     $this->email = $email;
-    // }
-
-    // create user
+    // DBに新たなユーザーを作る
     static function create($nickname, $email, $pwd)
     {
         $data = [
@@ -35,6 +29,7 @@ class User
     // public function save(){}
 
     // get all users
+    // DBからユーザーレコードを全部取得する
     static function all()
     {
         $db = DB::getInstance();
@@ -47,6 +42,7 @@ class User
     }
 
     // find user by ID 
+    // IDに基づいてDBからユーザーを取得する
     static function find($id)
     {
         $db = DB::getInstance();
@@ -61,6 +57,7 @@ class User
         return null;
     }
 
+    // ローグイン確認ため、ユーザーを取得する
     static function login($email, $pwd)
     {
         $db = DB::getInstance();
@@ -72,6 +69,7 @@ class User
     }
 
     // where function (not working yet)
+    // まだ完全しません。
     static function where($row_name, $operator = '=', $values)
     {
         $db = DB::getInstance();
@@ -87,6 +85,7 @@ class User
     }
 
     // checking users exits or not depend on what row and what keyword is used ( row has 2 option 'email' and 'nickname')
+    // DBにユーザー情報を保存する確認
     static function exist($row_name, $keyword)
     {
         $db = DB::getInstance();
@@ -104,6 +103,7 @@ class User
         return ($record['cnt'] > 0) ? true : false;
     }
 
+    // セッションから情報に基づいて現在ローグインしているユーザーを取得する
     static function getCurrent($email)
     {
         $db  = DB::getInstance();
@@ -114,6 +114,7 @@ class User
         return !empty($user) ? $user : null;
     }
 
+    // このユーザーの記事を全部取得する
     public function articles()
     {
         $db     = DB::getInstance();

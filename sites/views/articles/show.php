@@ -1,9 +1,7 @@
+<!-- 記事内容ページ -->
 <div class="container">
-
   <div class="row">
-
     <div class="col-lg-12">
-
       <div class="card mt-4">
       <div id="carouselExampleIndicators" style="height: 550px;" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
@@ -43,11 +41,8 @@
         }?>
           <h4>Created at : <?= $article->created_at ?></h4>
           <p class="card-text"><?= $article->content ?></p>
-          
         </div>
       </div>
     </div>
-
   </div>
-
 </div>

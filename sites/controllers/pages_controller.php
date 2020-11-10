@@ -11,6 +11,7 @@ class PagesController extends BaseController
     $this->folder = 'pages';
   }
 
+  // トップページコントローラー
   public function home()
   {
     $articles = Article::all();
