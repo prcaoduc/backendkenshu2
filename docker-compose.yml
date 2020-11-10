@@ -26,6 +26,8 @@ services:
             - backendkenshu2
         volumes: 
             - dir-site:/home/sites/
+        env_file:
+            - ./php/php.env
     #container Apache HTTPD
     httpd:
         container_name: httpd
