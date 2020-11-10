@@ -7,6 +7,7 @@
    - index?controller=(CONTROLLER_NAME)&action=(ACTION_NAME)&id=(ITEM_ID)
    - 例 : localhost:9999/index.php?controller=articles&action=show&id=1
 ## DATABASE
+![alt text](https://drive.google.com/uc?export=view&id=11LQ9hyYgSh-FIYc6FHMduZQAp6BunPUA)
 ### articles:
 - id :
   - INT
@@ -86,7 +87,7 @@ DBのusersテーブルにマッピングします
 DBのimagesテーブルにマッピングします
 ### Tag:
 DBのtagsテーブルにマッピングします
-## ROUTES:
+## ROUTESとCONTROLLERS:
 ルーティングすることはindex.phpに実現されます。MVC実装すると：Controllerごとにfolderというプロパティがあります。index.phpがこのプロパティから見るとパスなどを認識できます。
 ### Pages Routes :
 スターティクページのルート
