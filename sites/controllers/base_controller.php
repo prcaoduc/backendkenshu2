@@ -1,5 +1,5 @@
-
 <?php
+require_once('helpers/session.php');
 class BaseController
 {
   // この変数はアップのviewsの中にあるフォルダを示すため、このフォルダは操作したいviewファイルがある
@@ -10,6 +10,7 @@ class BaseController
   {
     // 操作したいファイルが存在するかをチェックする
     $view_file = 'views/' . $this->folder . '/' . $file . '.php';
+    
     if (is_file($view_file)) {
       extract($data);
       ob_start();

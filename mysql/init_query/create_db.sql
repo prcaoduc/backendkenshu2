@@ -20,7 +20,7 @@ CREATE TABLE users(
     nickname VARCHAR(20) NOT NULL UNIQUE,
 	email VARCHAR(255) NOT NULL UNIQUE,
 	pass VARCHAR(255) NOT NULL,
-    isactive SMALLINT,
+    -- isactive SMALLINT,
     INDEX (nickname)
 );
 
@@ -31,6 +31,8 @@ CREATE TABLE articles(
 	content         TEXT NOT NULL,
 	author_id       INT UNSIGNED NOT NULL,
     created_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at     DATETIME DEFAULT NULL,
+    published       TINYINT(1) DEFAULT 1,
     -- published_at    DATETIME DEFAULT NULL,
     FOREIGN KEY (author_id) REFERENCES users(id),
     -- FULLTEXT (title, content),
@@ -78,10 +80,10 @@ INSERT INTO tags(name)
 -- users seeder
 INSERT INTO users(nickname, email, pass)
 	VALUES
-	( "Frodo",  "email1@test.com", "hashedpassword" ),
-    ( "Sam",    "email2@test.com", "hashedpassword" ),
-    ( "Pippin", "email3@test.com", "hashedpassword" ),
-    ( "Merry",  "email4@test.com", "hashedpassword" );
+	( "Frodo",  "email1@test.com", MD5('hashedpassword') ),
+    ( "Sam",    "email2@test.com", MD5('hashedpassword') ),
+    ( "Pippin", "email3@test.com", MD5('hashedpassword') ),
+    ( "Merry",  "email4@test.com", MD5('hashedpassword') );
 
 -- articles seeder
 
@@ -117,11 +119,13 @@ delimiter //
 CREATE PROCEDURE insertimagesproc()
 BEGIN
     DECLARE i int DEFAULT 1;
+    DECLARE image_id int DEFAULT 1;
     WHILE i <= 28 DO
-		IF (i%7) = 1 THEN
-			INSERT INTO images(article_id, url, isthumbnail) VALUES ( (i%7)+1, 'https://picsum.photos/400', 1 );
+        SET image_id = FLOOR(RAND()*(100-1)+1);
+		IF (i%4) = 1 THEN
+			INSERT INTO images(article_id, url, isthumbnail) VALUES ( (i%7)+1, CONCAT('https://picsum.photos/seed/',image_id,'/1100/500'), 1 );
 		ELSE
-			INSERT INTO images(article_id, url, isthumbnail) VALUES ( (i%7)+1, 'https://picsum.photos/400', 0 );
+			INSERT INTO images(article_id, url, isthumbnail) VALUES ( (i%7)+1, CONCAT('https://picsum.photos/seed/',image_id,'/1100/500'), 0 );
         END IF;
         SET i = i + 1;
     END WHILE;

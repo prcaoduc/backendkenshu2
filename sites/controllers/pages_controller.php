@@ -1,5 +1,8 @@
 <?php
 require_once('controllers/base_controller.php');
+require_once('models/article.php');
+require_once('helpers/session.php');
+require_once('helpers/authentication.php');
 // スターティックページクラス
 class PagesController extends BaseController
 {
@@ -8,14 +11,11 @@ class PagesController extends BaseController
     $this->folder = 'pages';
   }
 
+  // トップページコントローラー
   public function home()
   {
-    $data = array(
-      'name' => 'Cao Son Duc',
-      'yomikata' => 'カオ・ソン・ドゥック',
-      'kanjiname' => '高・山・徳',
-      'age' => 23
-    );
+    $articles = Article::all();
+    $data = array('articles' => $articles);
     $this->render('home', $data);
   }
 
