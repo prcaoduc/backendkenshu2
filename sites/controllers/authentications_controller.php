@@ -118,6 +118,8 @@ class AuthenticationsController extends BaseController
                         'nickname'  => $session->get('signup', 'nickname')
                     );
                     $data = array('check_data' => $check_data);
+                    $token = $session->genToken();
+                    $data = ['token' => $token];
                     $this->render('check', $data);
                 }
                 // エラーが発生する場合、register viewに戻ります。

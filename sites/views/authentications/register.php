@@ -44,9 +44,7 @@
     <?php if ($errors_array['pwd-repeat'] == 'notsame'): ?>
     <p class="errors_array">* パスワードと一致ではありません</p> 
     <?php endif; ?>
-
     <hr>
-
     <button type="submit" class="registerbtn">入力内容を確認する</button>
   </div>
 

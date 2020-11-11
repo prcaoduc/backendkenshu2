@@ -35,8 +35,10 @@
                                         <?php if ($error['tag'] == 'blank') : ?>
                                             <span class="error">タグを入力ください</span>
                                         <?php endif; ?>
-                                        <input id="tag" type="text" name="tag" class="form-control" placeholder="記事のタグを入力ください *" required="required">
-                                        <small> This is a backend project so im gonna not target on tag selector</small>
+                                        <div id ="tag_wrapper">
+                                            <input type="text" name="tag[]" class="form-control inline" placeholder="記事のタグを入力ください *" required="required">
+                                        </div>
+                                        <a id="tag_new" class="btn btn-secondary">新しいタグ</a>
                                     </div>
                                 </div>
                             </div>
@@ -95,5 +97,8 @@
             fr.readAsDataURL(this.files[i]);
         }
     });
-    
+    $('#tag_new').on('click',function(e){
+        $('#tag_wrapper').append('<input type="text" name="tag[]" class="form-control" placeholder="記事のタグを入力ください *" required="required">');
+        // $(this).css("background", "#f99");
+    });
 </script>
