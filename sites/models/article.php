@@ -61,28 +61,33 @@ class Article
 
     // check already had tags if not insert
     // タグが存在の確認
-    $sql2 = "SELECT * FROM tags WHERE name = ?";
-    $req2 = $db->prepare($sql2);
-    $req2->execute(array($input['tag']));
-    $tag = $req2->fetch(\PDO::FETCH_OBJ);
-    if (isset($tag->name)) $data['tag_id'] = $tag->id;
-    else {
-      // 存在しなければ、保存する
-      $sql2 = "INSERT INTO tags (name) VALUES (?)";
-      $req = $db->prepare($sql2)->execute(array($input['tag']));
-      if ($req > 0) $data['tag_id'] = $db->lastInsertId();
+    
+    foreach($input['tag'] as $tag_name){
+      $sql2 = "SELECT * FROM tags WHERE name = ?";
+      $req2 = $db->prepare($sql2);
+      $req2->execute(array($tag_name));
+      $tag = $req2->fetch(\PDO::FETCH_OBJ);
+      if (isset($tag->name)) $data['tag_id'][] = $tag->id;
+      else {
+        // 存在しなければ、保存する
+      var_dump($tag_name);
+        $sql2 = "INSERT INTO tags (name) VALUES (?)";
+        $req = $db->prepare($sql2)->execute(array($tag_name));
+        if ($req > 0) $data['tag_id'][] = $db->lastInsertId();
+      }
     }
 
     // insert into pivot table tag's id and article's id from above
     // ピボットテーブルに記事とタグのリレーションの情報を保存する
     $article_id = $data['article_id'];
-    $tag_id = $data['tag_id'];
+    foreach($data['tag_id'] as $tag_id){
 
-    if (!empty($article_id) && !empty($tag_id)) {
-      $sql3 = "INSERT INTO article_tags VALUES ( $article_id , $tag_id )";
-      $req = $db->prepare($sql3)->execute();
+      if (!empty($article_id) && !empty($tag_id)) {
+        $sql3 = "INSERT INTO article_tags VALUES ( $article_id , $tag_id )";
+        $req = $db->prepare($sql3)->execute();
 
-      $result = $req > 0 ? $data['article_id'] : null;
+        $result = $req > 0 ? $data['article_id'] : null;
+      }
     }
     return $result;
   }

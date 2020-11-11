@@ -16,7 +16,9 @@
 
   <body>
     <?php require_once('header.php') ?>
-    <?= @$content ?>
+    <div class="container">
+      <?= @$content ?>
+    </div>
   </body>
 
   </html>
