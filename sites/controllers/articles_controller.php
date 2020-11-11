@@ -1,6 +1,8 @@
 <?php
 require_once('controllers/base_controller.php');
 require_once('models/article.php');
+require_once('models/tag.php');
+require_once('models/articletags.php');
 require_once('helpers/authentication.php');
 require_once('helpers/validator.php');
 class ArticlesController extends BaseController
@@ -133,19 +135,37 @@ class ArticlesController extends BaseController
   public function update()
   {
     $session = new Session();
+    $db = DB::getInstance();
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // POST確認
     if (!empty($_POST)) {
       // CSRF確認
       if (!empty($_POST['csrftoken']) && (hash_equals($session->get('token'), $_POST['csrftoken']))) {
-        $article = Article::find($_POST['id']);
-        $input = [
-          'title'     => $_POST['title'],
-          'content'   => $_POST['content'],
-        ];
-        $result = $article->update($input);
-        if (!empty($article)) {
-          header('Location: ?controller=users&action=articles');
-        } else header('Location: ?controller=articles&action=edit&id=' . $article->id);
+        try {
+          $db->beginTransaction();
+          // 記事の情報を編集する
+          $article = Article::find($_POST['id']);
+          $input = [
+            'title'     => $_POST['title'],
+            'content'   => $_POST['content'],
+          ];
+          $article->update($input);
+
+          // タグとのリレーションを編集する
+          $tags_input = $_POST['tag'];
+          $tags_id = Tag::multiCreate($tags_input);
+      
+          // insert into pivot table tag's id and article's id from above
+          // ピボットテーブルに記事とタグのリレーションの情報を保存する
+          ArticleTags::multiTagsCreate($article->id, $tags_id);
+          $db->commit();
+          if (!empty($article)) {
+            header('Location: ?controller=users&action=articles');
+          } else header('Location: ?controller=articles&action=edit&id=' . $article->id);
+        } catch (PDOException $e) {
+          $db->rollback();
+          throw $e;
+        }
       } else {
         // CSRF確認失敗すると、ログアウトする
         $errors_array['csrftoken'] = 'wrong';

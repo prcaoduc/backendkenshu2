@@ -57,39 +57,15 @@ class Article
       $input['content'],
       $input['author_id']
     ));
-    if ($req1 > 0) $data['article_id'] = $db->lastInsertId();
+    if ($req1 > 0) $article_id = $db->lastInsertId();
 
     // check already had tags if not insert
     // タグが存在の確認
-    
-    foreach($input['tag'] as $tag_name){
-      $sql2 = "SELECT * FROM tags WHERE name = ?";
-      $req2 = $db->prepare($sql2);
-      $req2->execute(array($tag_name));
-      $tag = $req2->fetch(\PDO::FETCH_OBJ);
-      if (isset($tag->name)) $data['tag_id'][] = $tag->id;
-      else {
-        // 存在しなければ、保存する
-      var_dump($tag_name);
-        $sql2 = "INSERT INTO tags (name) VALUES (?)";
-        $req = $db->prepare($sql2)->execute(array($tag_name));
-        if ($req > 0) $data['tag_id'][] = $db->lastInsertId();
-      }
-    }
-
+    $tags_id = Tag::multiCreate($input['tag']);
     // insert into pivot table tag's id and article's id from above
     // ピボットテーブルに記事とタグのリレーションの情報を保存する
-    $article_id = $data['article_id'];
-    foreach($data['tag_id'] as $tag_id){
-
-      if (!empty($article_id) && !empty($tag_id)) {
-        $sql3 = "INSERT INTO article_tags VALUES ( $article_id , $tag_id )";
-        $req = $db->prepare($sql3)->execute();
-
-        $result = $req > 0 ? $data['article_id'] : null;
-      }
-    }
-    return $result;
+    ArticleTags::multiTagsCreate($article_id, $tags_id);
+    return $article_id;
   }
 
   // 作者のIDに基づいて記事を取得する
@@ -160,7 +136,7 @@ class Article
     $query = 'UPDATE articles SET title = :title, content = :content WHERE id = :id';
     $req = $db->prepare($query);
     $req->execute($input);
-    return ($req > 0) ? $this : false;
+    return ($req > 0) ? $db->lastInsertId() : false;
   }
 
   // 記事のソフト削除

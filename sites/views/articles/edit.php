@@ -16,7 +16,6 @@
                         <div class="messages"></div>
 
                         <div class="controls">
-
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -29,6 +28,23 @@
                                         <?php endif; ?>
                                         <input id="title" type="text" name="title" class="form-control" placeholder="記事のタイトルを入力ください *" required="required" data-error="タイトルが必要。" value="<?= $article->title ?>">
                                         <small>　タイトルの最大長さは５０キャラクター</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="tag">Tag * </label>
+                                        
+                                        <div id ="tag_wrapper">
+                                        <?php
+                                            foreach($article->tags() as $tag){
+                                                echo '<div class="form-inline"><input type="text" name="tag[]" class="form-control inline" value="'.$tag->name.'" required="required">
+                                                <button class="btn btn-warning remove_tag_button" type="button"><i class="fa fa-times"></i></button></div>';
+                                            }
+                                        ?>
+                                        </div>
+                                        <a class="btn btn-secondary tag_new">新しいタグ</a>
                                     </div>
                                 </div>
                             </div>
@@ -59,3 +75,20 @@
         </div>
     </div>
 </div>
+<script>
+    $('.tag_new').on('click',function(e){
+        $('#tag_wrapper').append('<div class="form-inline"><input type="text" name="tag[]" class="form-control inline" required="required"><button class="btn btn-warning remove_tag_button" type="button"><i class="fa fa-times"></i></button></div>');
+        // $(this).css("background", "#f99");
+    });
+    $(document).on("click", '.remove_tag_button',function(e){
+        var num_items = $('.remove_tag_button').length;
+        console.log(num_items);
+        if(num_items > 1){
+            $(this).parent().remove();
+        }
+        else {
+            $(this).parent().find('#once_tag').remove();
+            $(this).parent().append('<span class="text-danger" id="once_tag">article have to have at least 1 tag</span>');
+        }
+    });
+</script>
