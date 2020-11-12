@@ -51,16 +51,18 @@ class ArticlesController extends BaseController
       // CSRF確認
       if (!empty($_POST['csrftoken']) && (hash_equals($session->get('token'), $_POST['csrftoken']))) {
         $errors_array = [];
-        $thumbnail_position = 0;
+        $thumbnail_id = 0;
         $input = [
           'title'           => $_POST['title'],
           'content'         => $_POST['content'],
           'tag'             => $_POST['tag'],
           'author_id'       => Authentication::user()->id,
+        ];
+        $input_image = [
           'selected_images' => $_POST['selected_images'],
           'thumbnail'       => $_POST['thumbnail']
         ];
-        if (!empty($input['thumbnail'])) $thumbnail_position = $input['thumbnail'];
+        if (!empty($input['thumbnail'])) $thumbnail_id = $input['thumbnail'];
 
         ///////////// validation codes /////////////
         //length validation
@@ -81,12 +83,16 @@ class ArticlesController extends BaseController
             $article_id = Article::create($input['title'], $input['content'], $input['tag'], $input['author_id']);
             
             // 記事とイメージの関係を保存する
-            if( !empty($input['selected_images']) && !empty($input['thumbnail']) ){
-              foreach($input['selected_images'] as $image_id){
-                var_dump($image_id);
-                var_dump($article_id);
-                if($image_id == $input['thumbnail']) ArticleImages::create($article_id, $image_id, 1);
-                else                                ArticleImages::create($article_id, $image_id, 0);
+            if( !empty($input_image['selected_images']) && !empty($input_image['thumbnail']) ){
+              for($i = 0; $i < count($input_image['selected_images']) ; $i++){
+                if($thumbnail_id != 0){
+                  if($input_image['selected_images'][$i] == $thumbnail_id ) ArticleImages::create($article_id, $input_image['selected_images'][$i], 1);
+                  else ArticleImages::create($article_id, $input_image['selected_images'][$i], 0);
+                }
+                else if ($i == $thumbnail_id){
+                  ArticleImages::create($article_id, $input_image['selected_images'][$i], 1);
+                }
+                else ArticleImages::create($article_id, $input_image['selected_images'][$i], 0);
               }
             }
             $db->commit();

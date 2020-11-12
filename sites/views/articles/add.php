@@ -6,7 +6,7 @@
                 <div class="col-lg-12 col-lg-offset-2">
                     <h1>新たな記事を作成する</h1>
                     <form id="article_form" method="post" action="?controller=articles&action=create" role="form" enctype="multipart/form-data">
-                        <input type="hidden" name="csrftoken" value="<?php echo htmlentities($token); ?>" />
+                        <input id="csrftoken" type="hidden" name="csrftoken" value="<?php echo htmlentities($token); ?>" />
                         <div class="controls">
                             <div class="row">
                                 <div class="col-md-12">
@@ -110,15 +110,6 @@
 <script>
     $('input[type="file"]').on('change', function() {
         var fd = new FormData($(this).parents('form')[0]);
-        for (var i = 0; i < this.files.length; i++) {
-            var fr = new FileReader();
-            fr.onload = (function(i) {
-                return function(e) {
-                    $("#user_image").load(location.href + " #user_image");
-                };
-            })(i);
-            fr.readAsDataURL(this.files[i]);
-        }
         $.ajax({
             url: '?controller=images&action=create',
             type: 'POST',
@@ -128,7 +119,7 @@
                 return myXhr;
             },
             success: function(data) {
-                alert("Data Uploaded: " + data);
+                $("#user_image").load(location.href + " #user_image");
             },
             cache: false,
             contentType: false,

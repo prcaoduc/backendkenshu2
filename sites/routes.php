@@ -12,7 +12,6 @@ $controllers = array(
 // URLから取得したパラメーターはまだ設定しないばい（まだ作らない）
 // controller = 'pages', action = 'error'.
 if (!array_key_exists($controller, $controllers) || !in_array($action, $controllers[$controller])) {
-  echo($controller);
   $controller = 'pages';
   $action = 'error';
 }
