@@ -30,10 +30,13 @@
                                         <?php if ($error['tag'] == 'blank') : ?>
                                             <span class="error">タグを入力ください</span>
                                         <?php endif; ?>
-                                        <div id="tag_wrapper">
-                                            <input type="text" name="tag[]" class="form-control inline" placeholder="記事のタグを入力ください *" required="required">
+                                        <div id ="tag_wrapper">
+                                            <div class="form-inline">
+                                                <input type="text" name="tag[]" class="form-control inline" placeholder="記事のタグを入力ください *" required="required">
+                                                <button class="btn btn-warning remove_tag_button" type="button"><i class="fa fa-times"></i></button>
+                                            </div>
                                         </div>
-                                        <a id="tag_new" class="btn btn-secondary">新しいタグ</a>
+                                        <a class="btn btn-secondary tag_new">新しいタグ</a>
                                     </div>
                                 </div>
                             </div>
@@ -150,8 +153,8 @@
             $('#content').val(content +  keyValue[1]);
         }
     });
-    $('#tag_new').on('click', function(e) {
-        $('#tag_wrapper').append('<input type="text" name="tag[]" class="form-control" placeholder="記事のタグを入力ください *" required="required">');
+    $('.tag_new').on('click',function(e){
+        $('#tag_wrapper').append('<div class="form-inline"><input type="text" name="tag[]" class="form-control inline" placeholder="記事のタグを入力ください *" required="required"><button class="btn btn-warning remove_tag_button" type="button"><i class="fa fa-times"></i></button></div>');
         // $(this).css("background", "#f99");
     });
 </script>
