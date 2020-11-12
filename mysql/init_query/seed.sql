@@ -56,7 +56,9 @@ delimiter //
 CREATE PROCEDURE insertimagesproc()
 BEGIN
     DECLARE i int DEFAULT 0;
+    DECLARE user_id int;
     WHILE i <= 70 DO
+        SET user_id := (SELECT author_id FROM articles WHERE author_id = i);
 		IF (i%7) = 1 THEN
 			INSERT INTO images(article_id, content, isthumbnail) VALUES ( i, (i%7)+1, 'https://picsum.photos/400', 1 );
 		ELSE

@@ -110,7 +110,8 @@ class Article
   {
     $db = DB::getInstance();
     $list = [];
-    $query = 'SELECT * FROM images WHERE article_id =  ?';
+    $query = 'SELECT * FROM images INNER JOIN article_images ON images.id = article_images.image_id '.
+      'INNER JOIN articles on articles.id = article_images.article_id WHERE article_id =  ?';
     $req = $db->prepare($query);
     $req->execute(array($this->id));
     foreach ($req->fetchAll(\PDO::FETCH_CLASS, 'Image') as $record) {
