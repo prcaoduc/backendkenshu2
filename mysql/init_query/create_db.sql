@@ -1,6 +1,7 @@
 -- DROP DATABASE IF EXISTS backendkenshu;
 USE backendkenshu;
 
+DROP TABLE IF EXISTS article_images;
 DROP TABLE IF EXISTS article_tags;
 DROP TABLE IF EXISTS tags;
 DROP TABLE IF EXISTS images;
@@ -26,26 +27,39 @@ CREATE TABLE users(
 
 -- articles table 
 CREATE TABLE articles(
-	id              INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
-	title           NVARCHAR(255) NOT NULL,
-	content         TEXT NOT NULL,
-	author_id       INT UNSIGNED NOT NULL,
-    created_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    modified_at     DATETIME DEFAULT NULL,
-    published       TINYINT(1) DEFAULT 1,
-    -- published_at    DATETIME DEFAULT NULL,
-    FOREIGN KEY (author_id) REFERENCES users(id),
+	id                          INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+	title                       NVARCHAR(255) NOT NULL,
+	content                     TEXT NOT NULL,
+	author_id                   INT UNSIGNED NOT NULL,
+    created_at                  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at                 DATETIME DEFAULT NULL,
+    published                   TINYINT(1) DEFAULT 1,
+    -- published_at             DATETIME DEFAULT NULL,
+    FOREIGN KEY (author_id)     REFERENCES users(id),
     -- FULLTEXT (title, content),
     KEY (title)
 );
 
 -- images table
 CREATE TABLE images(
-	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	article_id INT UNSIGNED,
-	url TEXT NOT NULL,
-	isthumbnail TINYINT(1),
-    FOREIGN KEY (article_id) REFERENCES articles(id)
+	id                          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id                     INT UNSIGNED,
+	url                         TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- junction table of articles and images
+CREATE TABLE article_images(
+    article_id                  INT UNSIGNED NOT NULL,
+    image_id                    INT UNSIGNED NOT NULL,
+    isthumbnail                  TINYINT(1),
+    CONSTRAINT PK_articleimage PRIMARY KEY
+    (
+        article_id,
+        image_id
+    ),
+    FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE,
+    FOREIGN KEY (image_id) REFERENCES  images(id) ON DELETE CASCADE
 );
 
 -- junction table of articles and tags 
@@ -119,19 +133,31 @@ delimiter //
 CREATE PROCEDURE insertimagesproc()
 BEGIN
     DECLARE i int DEFAULT 1;
-    DECLARE image_id int DEFAULT 1;
+    DECLARE image_id int;
+    DECLARE user_id int;
     WHILE i <= 28 DO
+        SET user_id = (SELECT author_id FROM articles WHERE id = (i%7)+1);
         SET image_id = FLOOR(RAND()*(100-1)+1);
 		IF (i%4) = 1 THEN
-			INSERT INTO images(article_id, url, isthumbnail) VALUES ( (i%7)+1, CONCAT('https://picsum.photos/seed/',image_id,'/1100/500'), 1 );
+			INSERT INTO images(id, user_id, url) VALUES (i, user_id, CONCAT('https://picsum.photos/seed/',image_id,'/1100/500'));
+            INSERT INTO article_images(article_id, image_id, isthumbnail) VAlUES ( (i%7)+1, i, 1);
 		ELSE
-			INSERT INTO images(article_id, url, isthumbnail) VALUES ( (i%7)+1, CONCAT('https://picsum.photos/seed/',image_id,'/1100/500'), 0 );
+			INSERT INTO images(id, user_id, url) VALUES ( i, user_id, CONCAT('https://picsum.photos/seed/',image_id,'/1100/500'));
+            INSERT INTO article_images(article_id, image_id, isthumbnail) VAlUES ( (i%7)+1, i, 0);
         END IF;
         SET i = i + 1;
     END WHILE;
 END//
 delimiter ;
 CALL insertimagesproc();
+
+-- delimiter //
+-- CREATE PROCEDURE insertarticleimageproc()
+-- BEGIN
+
+-- END//
+-- delimiter ;
+-- CALL insertarticleimageproc();
 
 /*
 SELECT * FROM images

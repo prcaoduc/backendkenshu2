@@ -1,5 +1,6 @@
 <?php
 require_once('models/article.php');
+require_once('models/image.php');
 // usersテーブルレコードをマッピングするためのモデルクラス
 class User
 {
@@ -123,6 +124,18 @@ class User
         $req    = $db->prepare($query);
         $req->execute([$this->id]);
         foreach ($req->fetchAll(\PDO::FETCH_CLASS, 'Article') as $record) {
+            $list[] = $record;
+        }
+        return $list;
+    }
+
+    public function images(){
+        $db     = DB::getInstance();
+        $list   = [];
+        $query  = 'SELECT * FROM images WHERE user_id = ?';
+        $req    = $db->prepare(($query));
+        $req->execute([$this->id]);
+        foreach ($req->fetchAll(PDO::FETCH_CLASS, 'Image') as $record) {
             $list[] = $record;
         }
         return $list;

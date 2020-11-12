@@ -5,14 +5,13 @@ class Image{
     public $isthumbnail;
 
     // 新しいイメージ情報をDBに保存する
-    public static function create($article_id = null, $url, $isthumbnail){
+    public static function create($user_id = null, $url){
         $data = [
-            'article_id'        => $article_id,
-            'url'               => $url,
-            'isthumbnail'       => $isthumbnail
+            'user_id'        => $user_id,
+            'url'               => $url
         ];
         $db = DB::getInstance();
-        $sql = "INSERT INTO images (article_id, url, isthumbnail) VALUES (:article_id, :url, :isthumbnail)";
+        $sql = "INSERT INTO images (user_id, url) VALUES (:user_id, :url)";
         $req = $db->prepare($sql);
         $req->execute($data);
         $image_id = $db->lastInsertId();

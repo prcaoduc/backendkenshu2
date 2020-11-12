@@ -5,7 +5,8 @@ $controllers = array(
   'pages'                 => ['home', 'error'], // staticpages routes
   'articles'              => ['index', 'show', 'add', 'create', 'edit', 'update', 'delete'], // articles routes
   'users'                 => ['index', 'show', 'articles'], // users routes
-  'authentications'       => ['login', 'signin', 'register', 'check', 'signup', 'thanks', 'logout'] // signup, logout, login routes
+  'authentications'       => ['login', 'signin', 'register', 'check', 'signup', 'thanks', 'logout'], // signup, logout, login routes
+  'images'                => ['create']
 ); 
 
 // URLから取得したパラメーターはまだ設定しないばい（まだ作らない）
