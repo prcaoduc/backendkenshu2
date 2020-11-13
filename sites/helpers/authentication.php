@@ -1,7 +1,8 @@
 <?php
-require_once('controllers/base_controller.php');
-require_once('helpers/session.php');
-require_once('models/user.php');
+require_once(__DIR__.'/../controllers/base_controller.php');
+require_once(__DIR__.'/../helpers/session.php');
+require_once(__DIR__.'/../models/user.php');
+require_once(__DIR__.'/../models/autologin.php');
 // ユーザーセッション処理するためのクラス
 class Authentication
 {
@@ -36,5 +37,22 @@ class Authentication
         $email = $session->get('email');
         $user = User::getCurrent($email);
         return isset($user) ? $user : null;
+    }
+
+    // 自動ログインのため、クッキートークン発生
+    public static function setAuthToken($id){
+        $token = bin2hex(random_bytes(32));
+        $timeout = 7 * 24 * 60 * 60; // 認証の有効期間(1週間) 
+        $expired_time = time() + $timeout; // 認証の有効期限
+        $token = (Autologin::exists($id)) ? Autologin::update($id, $token, $expired_time) : Autologin::create($id, $token, $expired_time);
+        setcookie('token', $token, $expired_time); // トークンをクッキーに
+    }
+
+    public static function checkAuthToken($token){
+        $savedLogin = Autologin::findByToken($token);
+        if(!empty($savedLogin->expired_time) && $savedLogin->expired_time > time()){
+            return false;
+        }
+        else return $savedLogin->id;
     }
 }

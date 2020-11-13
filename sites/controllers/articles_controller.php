@@ -105,7 +105,6 @@ class ArticlesController extends BaseController
           exit;
         }
         $error = array('errors_array' => $errors_array);
-        var_dump($errors_array);
         $this->render('add', $error);
       } else {
         // CSRF確認失敗すると、ログアウトする

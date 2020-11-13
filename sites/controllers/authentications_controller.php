@@ -27,10 +27,14 @@ class AuthenticationsController extends BaseController
     {
         $session = new Session();
         // クッキー確認
-        if (!empty($_COOKIE['email'])) {
-            $_POST['email'] = $_COOKIE['email'];
-            $_POST['pwd'] = $_COOKIE['pwd'];
-            $_POST['save'] = 'on';
+        if (isset($_COOKIE['token'])) {
+            $user_id = Authentication::checkAuthToken($_COOKIE['token']);
+            if(!empty($user_id)){
+                $user = User::find($user_id);
+                $_POST['email'] = $user->email;
+                $_POST['pwd'] = $user->pass;
+                $_POST['save'] = 'on';
+            }
         }
         // POST空確認
         if (!empty($_POST)) {
@@ -48,8 +52,7 @@ class AuthenticationsController extends BaseController
                         $session->set('email', $member->email);
                         $session->set('loggedin_time', time());
                         if ($_POST['save'] == 'on') {
-                            setcookie('email', $email, time() + 60 * 60 * 24 * 14);
-                            setcookie('pwd', $pwd, time() + 60 * 60 * 24 * 14);
+                            Authentication::setAuthToken($member->id);
                         }
                         header('Location: ?controller=users&action=show&id=' . $member->id);
                         exit;
