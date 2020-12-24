@@ -1,0 +1,14 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [NC,L]
+RewriteRule ^.*$ index.php [NC,L]
+Options -Indexes
+ErrorDocument 401 /views/errors/401.php
+
+ErrorDocument 403 /views/errors/403.php
+
+ErrorDocument 404 /views/errors/404.php
+
+ErrorDocument 500 /views/errors/500.php

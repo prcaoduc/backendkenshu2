@@ -1,12 +1,16 @@
 -- DROP DATABASE IF EXISTS backendkenshu;
 USE backendkenshu;
 
+DROP TABLE IF EXISTS autologin;
 DROP TABLE IF EXISTS article_images;
 DROP TABLE IF EXISTS article_tags;
 DROP TABLE IF EXISTS tags;
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS articles;
 DROP TABLE IF EXISTS users;
+
+
+
 
 -- tags table
 CREATE TABLE tags(
@@ -73,6 +77,14 @@ CREATE TABLE article_tags(
     ),
     FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE,
     FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+);
+
+-- autologin table
+CREATE TABLE autologin(
+    user_id INT UNSIGNED PRIMARY KEY,
+    token VARCHAR(255),
+    expired_time INT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 USE backendkenshu;
